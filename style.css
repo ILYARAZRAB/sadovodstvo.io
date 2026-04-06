@@ -1,0 +1,1092 @@
+/* =============================================
+   CUSTOM OVERRIDES — SNT Demo Site Clone
+   1) Interactive tab buttons (hover/active/click)
+   2) Smooth page loading animations
+   3) Full responsive/adaptive mobile design
+   ============================================= */
+
+/* =============================================
+   0. PAGE LOAD ANIMATION
+   ============================================= */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Body starts hidden, JS adds .loaded class */
+body {
+    font-family: 'Montserrat', sans-serif !important;
+    background: #f7f9fc !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+body.loaded {
+    opacity: 1;
+}
+
+/* Animate sections on scroll */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Header animates in from top */
+.header {
+    position: relative !important;
+    z-index: 100 !important;
+    animation: fadeIn 0.5s ease both;
+}
+
+/* Staggered hero/breadcrumbs */
+.intro-name {
+    background-color: #e8f5d0 !important;
+    animation: fadeIn 0.6s ease 0.2s both;
+}
+
+html {
+    scroll-behavior: smooth !important;
+}
+
+
+/* =============================================
+   1. TABS — INTERACTIVE BUTTONS
+   ============================================= */
+
+/* --- Fix the original translateY overlap --- */
+.tabs .tabs__list {
+    transform: none !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    position: relative !important;
+}
+
+section.tabs {
+    padding-top: 40px !important;
+    padding-bottom: 0 !important;
+}
+
+section.tabs > .container:first-child {
+    margin-bottom: 10px !important;
+}
+
+/* Tabs navigation bar */
+.tabs__list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    list-style: none !important;
+    padding: 0 15px !important;
+    margin: 0 !important;
+    border-bottom: none !important;
+    gap: 0 !important;
+}
+
+.tabs__item {
+    list-style: none !important;
+}
+
+/* --- Tab button: default state --- */
+.tabs__item a {
+    display: inline-block !important;
+    padding: 14px 24px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    color: #555 !important;
+    text-decoration: none !important;
+    border-radius: 50px 50px 0 0 !important;
+    background: transparent !important;
+    position: relative !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    /* Smooth transitions for all interactive states */
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.2s ease,
+        box-shadow 0.3s ease,
+        letter-spacing 0.2s ease !important;
+}
+
+/* --- Tab button: hover state --- */
+.tabs__item a:hover {
+    background: rgba(245, 227, 86, 0.35) !important;
+    color: #222 !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 4px 12px rgba(245, 227, 86, 0.3) !important;
+}
+
+/* --- Underline indicator on hover --- */
+.tabs__item a::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) scaleX(0) !important;
+    width: 60% !important;
+    height: 3px !important;
+    background: #7caa2d !important;
+    border-radius: 3px 3px 0 0 !important;
+    transition: transform 0.3s ease !important;
+}
+
+.tabs__item a:hover::after {
+    transform: translateX(-50%) scaleX(1) !important;
+}
+
+/* --- Tab button: active (click/pressed) state --- */
+.tabs__item a:active {
+    transform: translateY(1px) scale(0.97) !important;
+    box-shadow: none !important;
+    background: rgba(245, 227, 86, 0.6) !important;
+    transition-duration: 0.05s !important;
+}
+
+/* --- Tab button: selected (current tab) --- */
+.tabs__item a[aria-selected="true"],
+.tabs__item a.active {
+    background: #f5e356 !important;
+    color: #222 !important;
+    font-weight: 700 !important;
+    transform: translateY(0) !important;
+    box-shadow: 0 -3px 10px rgba(245, 227, 86, 0.4) !important;
+}
+
+.tabs__item a[aria-selected="true"]::after,
+.tabs__item a.active::after {
+    transform: translateX(-50%) scaleX(1) !important;
+    background: #7caa2d !important;
+    height: 3px !important;
+}
+
+.tabs__item a[aria-selected="true"]:hover,
+.tabs__item a.active:hover {
+    background: #f5e356 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 -4px 14px rgba(245, 227, 86, 0.5) !important;
+}
+
+.tabs__item a[aria-selected="true"]:active,
+.tabs__item a.active:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* --- Focus for accessibility --- */
+.tabs__item a:focus {
+    outline: 2px solid #7caa2d !important;
+    outline-offset: 2px !important;
+}
+
+.tabs__item a:focus:not(:focus-visible) {
+    outline: none !important;
+}
+
+/* --- Tab panels --- */
+.tabs__panel {
+    background: #f5e356 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    /* Smooth content transitions */
+    animation: fadeIn 0.4s ease both;
+}
+
+.tabs__panel .container {
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+}
+
+.tabs__panel[style*="display: block"],
+.tabs__panel[style*="display:block"] {
+    margin-bottom: 0 !important;
+}
+
+
+/* =============================================
+   2. HEADER & NAVIGATION
+   ============================================= */
+
+.logo-link {
+    display: flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+    gap: 10px !important;
+    transition: opacity 0.2s !important;
+}
+
+.logo-link:hover {
+    opacity: 0.8 !important;
+}
+
+.logo-link p {
+    margin: 0 !important;
+    line-height: 1.2 !important;
+}
+
+.nav {
+    display: flex !important;
+    gap: 5px !important;
+}
+
+.nav__link {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    color: #333 !important;
+    text-decoration: none !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    transition: color .2s, background .2s !important;
+}
+
+.nav__link:hover {
+    color: #7caa2d !important;
+    background: rgba(124, 170, 45, 0.08) !important;
+}
+
+
+/* =============================================
+   3. BUTTONS
+   ============================================= */
+
+.btn--yellow {
+    background: #f5e356 !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 12px 25px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    color: #333 !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: box-shadow .25s, transform .15s, background .2s !important;
+    cursor: pointer !important;
+}
+
+.btn--yellow:hover {
+    box-shadow: 0 6px 20px rgba(245, 227, 86, 0.55) !important;
+    transform: translateY(-2px) !important;
+    background: #f7e94a !important;
+}
+
+.btn--yellow:active {
+    transform: translateY(0) scale(0.97) !important;
+    box-shadow: 0 2px 8px rgba(245, 227, 86, 0.3) !important;
+}
+
+.btn--green {
+    background: #7caa2d !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 14px 30px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: box-shadow .25s, transform .15s, background .2s !important;
+    cursor: pointer !important;
+}
+
+.btn--green:hover {
+    box-shadow: 0 6px 20px rgba(124, 170, 45, 0.45) !important;
+    transform: translateY(-2px) !important;
+    background: #8bbd33 !important;
+}
+
+.btn--green:active {
+    transform: translateY(0) scale(0.97) !important;
+    box-shadow: 0 2px 8px rgba(124, 170, 45, 0.2) !important;
+}
+
+.btn--pen {
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    padding: 5px !important;
+    opacity: 0.5 !important;
+    transition: opacity .2s, transform .15s !important;
+}
+
+.btn--pen:hover {
+    opacity: 1 !important;
+    transform: scale(1.15) !important;
+}
+
+.btn--support {
+    border-radius: 50px !important;
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+
+/* =============================================
+   4. BREADCRUMBS
+   ============================================= */
+
+.breadcrumbs {
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+}
+
+.breadcrumbs__item + .breadcrumbs__item::before {
+    content: '>' !important;
+    margin-right: 10px !important;
+    color: #999 !important;
+}
+
+.breadcrumbs__link {
+    color: #999 !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    transition: color .2s !important;
+}
+
+.breadcrumbs__link:hover {
+    color: #7caa2d !important;
+}
+
+.breadcrumbs__link--current {
+    color: #333 !important;
+}
+
+
+/* =============================================
+   5. TABLE STYLING
+   ============================================= */
+
+.table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+}
+
+.table td {
+    padding: 12px 15px !important;
+    border-bottom: 1px dashed #ddd !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 15px !important;
+    vertical-align: top !important;
+}
+
+.table tr:last-child td {
+    border-bottom: none !important;
+}
+
+
+/* =============================================
+   6. OFFERS & ANNOUNCEMENTS CARDS
+   ============================================= */
+
+.offers__card {
+    background: #fff !important;
+    border-radius: 30px !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transition: box-shadow .35s ease, transform .25s ease !important;
+}
+
+.offers__card:hover {
+    box-shadow: 0 14px 45px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-4px) !important;
+}
+
+/* Slider navigation buttons */
+.offers__btns {
+    display: flex !important;
+    gap: 10px !important;
+}
+
+.offers__btn {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    border: 2px solid #333 !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    position: relative !important;
+    transition: background .25s, border-color .25s, transform .15s !important;
+}
+
+.offers__btn::before {
+    content: '' !important;
+    display: block !important;
+    width: 12px !important;
+    height: 12px !important;
+    border-right: 2.5px solid #333 !important;
+    border-bottom: 2.5px solid #333 !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-60%, -50%) rotate(-45deg) !important;
+    background-image: none !important;
+    transition: border-color .25s !important;
+}
+
+.offers__btn--next::before {
+    transform: translate(-40%, -50%) rotate(135deg) !important;
+}
+
+.offers__btn:hover {
+    background: #f5e356 !important;
+    border-color: #f5e356 !important;
+    transform: scale(1.08) !important;
+}
+
+.offers__btn:hover::before {
+    border-color: #333 !important;
+}
+
+.offers__btn:active {
+    transform: scale(0.94) !important;
+}
+
+
+/* =============================================
+   7. LINKS
+   ============================================= */
+
+.link--green {
+    color: #7caa2d !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    transition: opacity .2s, letter-spacing .2s !important;
+}
+
+.link--green:hover {
+    opacity: 0.75 !important;
+    letter-spacing: 0.5px !important;
+}
+
+.link--blue {
+    color: #337ab7 !important;
+    text-decoration: underline !important;
+    transition: color .2s !important;
+}
+
+.link--blue:hover {
+    color: #23527c !important;
+}
+
+
+/* =============================================
+   8. STEP CARDS (КАК САЙТ СНТ ПОМОГАЕТ)
+   ============================================= */
+
+.bg-yellow {
+    background: #f5e356 !important;
+}
+
+.card-step {
+    display: block !important;
+    background: #fff !important;
+    border-radius: 25px !important;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08) !important;
+    overflow: hidden !important;
+    transition: box-shadow .35s, transform .25s !important;
+    height: 100% !important;
+    position: relative !important;
+}
+
+.card-step:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.14) !important;
+    transform: translateY(-5px) !important;
+}
+
+.card-step__main {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.recount--small .card-step--first::before,
+.recount--small .card-step--second::before,
+.recount--small .card-step--third::before {
+    content: '' !important;
+    position: absolute !important;
+    width: 80px !important;
+    height: 100px !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    right: 5px !important;
+    top: 5px !important;
+    opacity: 0.12 !important;
+    z-index: 0 !important;
+}
+
+.card-step::after {
+    display: none !important;
+}
+
+
+/* =============================================
+   9. FOOTER
+   ============================================= */
+
+.footer__top {
+    background: #fff !important;
+    border-top: 1px solid #eee !important;
+}
+
+.footer__bottom {
+    background: #333 !important;
+    color: #fff !important;
+}
+
+.footer__bottom a {
+    color: rgba(255, 255, 255, 0.7) !important;
+    text-decoration: none !important;
+    transition: color .2s !important;
+}
+
+.footer__bottom a:hover {
+    color: #fff !important;
+}
+
+.footer__bottom small {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.footer__link {
+    color: #333 !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    transition: color .2s !important;
+}
+
+.footer__link:hover {
+    color: #7caa2d !important;
+}
+
+.footer__item {
+    margin-bottom: 8px !important;
+}
+
+.footer__item a {
+    font-size: 13px !important;
+}
+
+.tel-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    color: #333 !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    transition: color .2s !important;
+}
+
+.tel-link:hover {
+    color: #7caa2d !important;
+}
+
+
+/* =============================================
+   10. TYPOGRAPHY
+   ============================================= */
+
+.title {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    color: #333 !important;
+}
+
+.title--h3 {
+    font-size: 22px !important;
+}
+
+.title--h5 {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+}
+
+.title--h6 {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
+
+.text {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+    color: #555 !important;
+}
+
+.text-weight {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 600 !important;
+}
+
+.lead {
+    border-left: 4px solid #cb6318 !important;
+    padding-left: 20px !important;
+    color: #cb6318 !important;
+    font-style: italic !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+}
+
+
+/* =============================================
+   11. ACCORDION
+   ============================================= */
+
+.accordion__label {
+    background: #fff !important;
+    border-radius: 15px !important;
+    text-decoration: none !important;
+    color: #333 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06) !important;
+    transition: box-shadow .25s, transform .15s !important;
+}
+
+.accordion__label:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-2px) !important;
+}
+
+.accordion__label:active {
+    transform: translateY(0) !important;
+}
+
+
+/* =============================================
+   12. BLOCK SECTIONS
+   ============================================= */
+
+.block {
+    padding: 40px 0 !important;
+}
+
+
+/* =============================================
+   13. MOBILE MENU BUTTON
+   ============================================= */
+
+.header__btn-menu {
+    width: 35px !important;
+    height: 25px !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    position: relative !important;
+    z-index: 200 !important;
+}
+
+.header__btn-menu span,
+.header__btn-menu span::before,
+.header__btn-menu span::after {
+    display: block !important;
+    width: 100% !important;
+    height: 3px !important;
+    background: #333 !important;
+    border-radius: 2px !important;
+    transition: transform .3s, opacity .3s !important;
+}
+
+.header__btn-menu span {
+    position: relative !important;
+}
+
+.header__btn-menu span::before,
+.header__btn-menu span::after {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+}
+
+.header__btn-menu span::before {
+    top: -8px !important;
+}
+
+.header__btn-menu span::after {
+    top: 8px !important;
+}
+
+/* Burger → X animation */
+.header__btn-menu.is-active span {
+    background: transparent !important;
+}
+
+.header__btn-menu.is-active span::before {
+    top: 0 !important;
+    transform: rotate(45deg) !important;
+}
+
+.header__btn-menu.is-active span::after {
+    top: 0 !important;
+    transform: rotate(-45deg) !important;
+}
+
+
+/* =============================================
+   14. MOBILE NAVIGATION PANEL
+   ============================================= */
+
+/* Mobile nav overlay */
+.nav--mobile-overlay {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .nav--mobile-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 150;
+        opacity: 0;
+        transition: opacity .3s ease;
+    }
+
+    .nav--mobile-overlay.is-open {
+        display: block;
+        opacity: 1;
+    }
+}
+
+
+/* =============================================
+   15. RESPONSIVE — TABLET (max-width: 991px)
+   ============================================= */
+
+@media (max-width: 991px) {
+    /* Navigation hides on smaller screens */
+    .header .nav {
+        display: none !important;
+    }
+
+    /* Show when menu is open */
+    .header .nav.nav--open {
+        display: flex !important;
+        flex-direction: column !important;
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        width: 280px !important;
+        height: 100vh !important;
+        background: #fff !important;
+        box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15) !important;
+        padding: 80px 30px 30px !important;
+        z-index: 160 !important;
+        gap: 0 !important;
+        animation: slideInRight 0.3s ease both;
+    }
+
+    .header .nav.nav--open .nav__link {
+        padding: 15px 10px !important;
+        font-size: 17px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        border-radius: 0 !important;
+    }
+
+    .header .nav.nav--open .nav__link:last-child {
+        border-bottom: none !important;
+    }
+
+    /* Mobile menu button is always visible */
+    .header__btn-menu {
+        display: block !important;
+    }
+
+    /* Tabs: horizontal scroll */
+    .tabs__list {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 5px !important;
+        scrollbar-width: none !important;
+    }
+
+    .tabs__list::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .tabs__item a {
+        font-size: 14px !important;
+        padding: 12px 18px !important;
+        white-space: nowrap !important;
+    }
+
+    /* Step cards stack */
+    .recount--small .col-md-4 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* Footer adjustments */
+    .footer__top .nav,
+    .footer__top nav {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+}
+
+
+/* =============================================
+   16. RESPONSIVE — MOBILE (max-width: 767px)
+   ============================================= */
+
+@media (max-width: 767px) {
+    /* Title scaling */
+    .title {
+        font-size: 20px !important;
+        line-height: 1.3 !important;
+    }
+
+    .title--h3 {
+        font-size: 18px !important;
+    }
+
+    .title--h5 {
+        font-size: 16px !important;
+    }
+
+    /* Hide subtitle */
+    .row-top .col.text-center {
+        display: none !important;
+    }
+
+    /* Container padding */
+    .container {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    /* Sections padding */
+    .block {
+        padding: 25px 0 !important;
+    }
+
+    section.tabs {
+        padding-top: 25px !important;
+    }
+
+    /* Tab buttons — compact */
+    .tabs__item a {
+        font-size: 13px !important;
+        padding: 10px 14px !important;
+    }
+
+    .tabs__item a::after {
+        height: 2px !important;
+    }
+
+    /* Offer cards */
+    .offers__card {
+        border-radius: 20px !important;
+    }
+
+    .offers__card .title--h3 {
+        font-size: 16px !important;
+    }
+
+    /* Cards go full width */
+    .offers__row .col-lg-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Buttons */
+    .btn--green,
+    .btn--yellow {
+        font-size: 13px !important;
+        padding: 11px 20px !important;
+    }
+
+    /* Footer columns stack */
+    .footer__bottom .col-lg-3,
+    .footer__bottom .col-lg-4,
+    .footer__bottom .col-md-4 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 15px !important;
+    }
+
+    .footer__top .row.align-items-center {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 15px !important;
+    }
+
+    .footer__top nav {
+        justify-content: center !important;
+    }
+
+    /* "КАК САЙТ СНТ ПОМОГАЕТ" — stack columns */
+    .bg-yellow .col-lg-4 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        text-align: center !important;
+        margin-bottom: 20px !important;
+    }
+
+    .bg-yellow .col-lg-8 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Card step columns */
+    .recount--small .col-md-4 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* Table responsive */
+    .table td {
+        font-size: 13px !important;
+        padding: 10px 8px !important;
+    }
+
+    /* Intro padding */
+    .intro-name {
+        padding: 20px 0 15px !important;
+    }
+
+    /* Action row — stack on mobile */
+    .d-flex.align-items-center.justify-content-between.mt-3 {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 15px !important;
+    }
+
+    /* Slider buttons */
+    .offers__btns {
+        align-self: flex-end !important;
+    }
+
+    .offers__btn {
+        width: 42px !important;
+        height: 42px !important;
+    }
+
+    /* Tel link in footer */
+    .tel-link {
+        font-size: 14px !important;
+    }
+
+    /* Lead/warning block */
+    .lead {
+        font-size: 13px !important;
+        padding-left: 15px !important;
+    }
+
+    /* Tab panel content */
+    .tabs__panel .container {
+        padding-top: 20px !important;
+        padding-bottom: 20px !important;
+    }
+
+    .tabs__panel .row .col-lg-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* Map height */
+    #map {
+        height: 250px !important;
+    }
+}
+
+
+/* =============================================
+   17. RESPONSIVE — SMALL MOBILE (max-width: 480px)
+   ============================================= */
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 18px !important;
+    }
+
+    .tabs__item a {
+        font-size: 12px !important;
+        padding: 8px 10px !important;
+    }
+
+    .btn--green,
+    .btn--yellow {
+        font-size: 12px !important;
+        padding: 10px 16px !important;
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .offers__card {
+        border-radius: 16px !important;
+        padding: 15px !important;
+    }
+
+    .footer__bottom {
+        text-align: center !important;
+    }
+
+    .footer__bottom .row {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .logo-link img {
+        width: 40px !important;
+        height: 37px !important;
+    }
+
+    .header .row-bottom {
+        gap: 10px !important;
+    }
+}
